@@ -1,8 +1,22 @@
 ## 方法1： 通过Java程序， 批量推送Jar文件到 Nexus私有库里 ##
-
+maven run App
 
 ## 方法2： 通过Liunx脚本， 批量推送Jar文件到 Nexus私有库里 ##
-## 前提条件： 在Project Home目录下创建Repo子目录，把要上传到Nexus的Jar放进去
+当nexus3为HTTP时，使用如下方式：
+如你需要上传utils-1.0.jar包，首先需准备新建一个pom.xml文件
+
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.foo</groupId>
+  <artifactId>utils</artifactId>
+  <version>1</version>
+</project>
+
+# 上传文件·(pom&jar要一起上传)
+curl -v -u admin:admin123 --upload-file pom.xml http://localhost:8081/nexus/repository/maven-releases/org/foo/utils/1.0/utils-1.0.pom
+curl -v -u admin:admin123 --upload-file utils-1.0.jar http://localhost:8081/nexus/repository/maven-releases/org/foo/utils/1.0/utils-1.0.jar
+
+# 前提条件： 在Project Home目录下创建Repo子目录，把要上传到Nexus的Jar放进去
 ./import-jar.sh -u admin -p admin123 -r http://ip:port/repository/myrepo/
 
 如果mavenimport.sh是在Windows编辑后导入Linux的会有问题
