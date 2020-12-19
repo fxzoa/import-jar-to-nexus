@@ -1,16 +1,21 @@
 package tools.nexus.upload;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 /**
  * @author dy.huang
@@ -18,10 +23,10 @@ import org.apache.http.entity.mime.content.StringBody;
  */
 public class App {
 
-    private static final String URL = "http://192.168.43.128:8888/service/rest/v1/components?repository=maven-releases";
-    private static final String APP_KEY = "username";
-    private static final String SECRET_KEY = "passward";
-    private static final String FILE_PATH = "C:\\Users\\.m2\\repository";
+    private static final String URL = "http://localhost:8081/service/rest/v1/components?repository=maven-releases";
+    private static final String APP_KEY = "admin";
+    private static final String SECRET_KEY = "admin";
+    private static final String FILE_PATH = "C:\\Users\\yutori\\.gradle\\caches\\modules-2\\files-2.1\\com.accenture.acts.gradle";
     private static String filePathJar = null;
     private static String filePathPom = null;
     private static boolean next = false;
@@ -63,10 +68,9 @@ public class App {
     }
 
     private static void upload(String pathJar, String pathPom) {
+        CloseableHttpClient client = HttpClients.createDefault();
         HttpPost post = new HttpPost(URL);
-        //设置请求头
         HashMap<String, String> header = new HashMap<>();
-        // 认证token
         header.put("Authorization", getHeader());
         for (String key : header.keySet()) {
             post.addHeader(key, header.get(key));
@@ -100,6 +104,13 @@ public class App {
 
         filePathJar = null;
         filePathPom = null;
+        HttpEntity entity = builder.build();
+        post.setEntity(entity);
+        try {
+            HttpResponse response = client.execute(post);
+            System.out.println("status code:" + response.getStatusLine().getStatusCode());
+        } catch (IOException ignored) {
+        }
     }
 
     private static String getHeader() {

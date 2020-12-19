@@ -1,0 +1,6 @@
+tools-nexus-upload:import-jar:jar:1.0-SNAPSHOT
++- org.apache.httpcomponents:httpclient:jar:4.5.3:compile
+|  +- org.apache.httpcomponents:httpcore:jar:4.4.6:compile
+|  +- commons-logging:commons-logging:jar:1.2:compile
+|  \- commons-codec:commons-codec:jar:1.9:compile
+\- org.apache.httpcomponents:httpmime:jar:4.5.3:compile

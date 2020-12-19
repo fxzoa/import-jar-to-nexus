@@ -1,0 +1,7 @@
+# http://git-scm.com/docs/gitignore
+
+import-jar/.settings/*
+import-jar/lib/*
+import-jar/target/*
+
+
